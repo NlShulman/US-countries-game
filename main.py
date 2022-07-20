@@ -3,6 +3,7 @@ import pandas
 
 screen = turtle.Screen()
 
+
 def create_screen():
     screen.title("U.S States Game")
     image = "blank_states_img.gif"
@@ -10,7 +11,6 @@ def create_screen():
     turtle_screen = turtle.Turtle()
     turtle_screen.shape(image)
     screen.tracer(0)
-
 
 
 def states_game():
@@ -21,15 +21,13 @@ def states_game():
     data.to_csv("States_to_learn_on_map.csv.csv")
     guess_state = []
     df = pandas.read_csv("States_to_learn_on_map.csv.csv")
-    # print(df.state)
-
     state_loc = turtle.Turtle()
     state_loc.hideturtle()
     state_loc.penup()
     while len(guess_state) < 50:
         user_answer = screen.textinput(title=f"{len(guess_state)}/50 States", prompt="Enter state").title()
 
-        if user_answer in all_states:
+        if user_answer in all_states and user_answer not in guess_state:
             screen.update()
             data_state = data[data.state == user_answer]
             state_loc.goto(int(data_state.x), int(data_state.y))
@@ -40,7 +38,6 @@ def states_game():
 
         elif user_answer == "Exit":
             create_screen()
-
             stl = df.state
 
             for state in stl:
@@ -53,13 +50,23 @@ def states_game():
                 states_game()
             else:
                 screen.exitonclick()
-            # states_to_learn = {
-            #     "countries to learn": []
-            # }
-            # for state in all_states:
-            #     if state not in guess_state:
-            #         states_to_learn["countries to learn"].append(state)
-            # data_file = pandas.DataFrame(states_to_learn)
-            # data_file.to_csv("States_to_learn.csv")
+
+        else:
+            pass
+
+    if len(guess_state) == 50:
+        screen.clear()
+        screen.tracer(0)
+        image = "turkey.gif"
+        screen.addshape(image)
+        turkey_image = turtle.Turtle()
+        turkey_image.shape(image)
+        win = turtle.Turtle()
+        win.penup()
+        win.goto(-75, 200)
+        win.write(arg="YOU WON", font=("Ariel", 30, "bold"))
+        screen.update()
+
+    screen.exitonclick()
 
 states_game()
